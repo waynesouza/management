@@ -1,0 +1,20 @@
+[tool.poetry]
+name = "management-server"
+version = "0.0.1"
+description = "Server for service management"
+authors = ["Wayne"]
+package-mode = false
+
+[tool.poetry.dependencies]
+python = "^3.9"
+Flask = "^2.2.2"
+Flask-SQLAlchemy = "^3.0.2"
+Flask-Cors = "^3.0.10"
+psycopg2-binary = "^2.9.6"
+
+[tool.poetry.group.dev.dependencies]
+pytest = "^7.2.0"
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
