@@ -25,5 +25,12 @@ services:
     environment:
       DATABASE_URI: "postgresql://user:password@db:5432/management_db"
 
+  client:
+    build: ./client
+    container_name: management-client
+    restart: always
+    ports:
+      - "3000:80"
+
 volumes:
   postgres_data:
