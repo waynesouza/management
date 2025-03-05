@@ -1,7 +1,7 @@
 from flask import Flask, request, jsonify
 from flask_cors import CORS
 from config import Config
-from models import db, Service
+from models import db, Budget, Service
 from datetime import datetime
 
 app = Flask(__name__)
@@ -11,6 +11,9 @@ db.init_app(app)
 
 with app.app_context():
     db.create_all()
+
+
+# Service routes
 
 
 @app.route('/services', methods=['GET'])
@@ -58,5 +61,58 @@ def edit_service(service_id):
     return jsonify(service.to_dict()), 200
 
 
+# Budget routes
+
+
+@app.route('/budget', methods=['POST', 'PUT'])
+def save_budget():
+    data = request.get_json()
+    if not data or 'service_id' not in data or 'data' not in data:
+        return jsonify({'error': 'Invalid payload'}), 400
+
+    service_id = data['service_id']
+    budget_data = data['data']
+
+    budget = Budget.query.filter_by(service_id=service_id).first()
+
+    if budget:
+        budget.data = budget_data
+        message = 'Budget updated successfully'
+    else:
+        budget = Budget(service_id=service_id, data=budget_data)
+        db.session.add(budget)
+        message = 'Budget created successfully'
+
+    try:
+        db.session.commit()
+        return jsonify({'message': message, 'budget': budget.to_dict()}), 200
+    except Exception as e:
+        db.session.rollback()
+        return jsonify({'error': str(e)}), 500
+
+
+@app.route('/budget/<int:service_id>', methods=['GET'])
+def get_budget(service_id):
+    budget = Budget.query.filter_by(service_id=service_id).first()
+    if budget:
+        return jsonify(budget.to_dict()), 200
+    return jsonify({'error': 'Budget not found'}), 404
+
+
+@app.route('/budget/<int:service_id>', methods=['DELETE'])
+def delete_budget(service_id):
+    budget = Budget.query.filter_by(service_id=service_id).first()
+    if not budget:
+        return jsonify({'error': 'Budget not found'}), 404
+
+    try:
+        db.session.delete(budget)
+        db.session.commit()
+        return jsonify({'message': 'Budget deleted successfully'}), 200
+    except Exception as e:
+        db.session.rollback()
+        return jsonify({'error': str(e)}), 500
+
+
 if __name__ == '__main__':
-    app.run(host="0.0.0.0", port=5000)
+    app.run(host='0.0.0.0', port=5000)

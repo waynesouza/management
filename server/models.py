@@ -53,3 +53,19 @@ class Service(db.Model):
             "receipt_certificate": self.receipt_certificate,
             "observations": self.observations,
         }
+
+
+class Budget(db.Model):
+    __tablename__ = 'budgets'
+    id = db.Column(db.Integer, primary_key=True)
+    service_id = db.Column(db.Integer, db.ForeignKey('services.id'), nullable=False)
+    data = db.Column(db.Text, nullable=True)
+
+    service = db.relationship('Service', backref=db.backref('budgets', lazy=True))
+
+    def to_dict(self):
+        return {
+            "id": self.id,
+            "service_id": self.service_id,
+            "data": self.data
+        }
