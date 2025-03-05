@@ -103,6 +103,9 @@ const ServiceList = () => {
                             <Link to={`/edit/${service.id}`}>
                                 <button>Editar</button>
                             </Link>
+                            <Link to={`/budget/${service.id}`}>
+                                <button>Criar/Editar Orçamento</button>
+                            </Link>
                         </td>
                     </tr>
                 ))}
