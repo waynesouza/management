@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import {Link, useParams} from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import '../App.css';
 
 const Budget = () => {
@@ -9,17 +9,36 @@ const Budget = () => {
     const [formData, setFormData] = useState({ nome: '', tipo: 'Peça', valor: '' });
     const [editingItem, setEditingItem] = useState(null);
 
+    // Busca o orçamento existente para o serviço e preenche a tabela
+    useEffect(() => {
+        if (serviceId) {
+            axios
+                .get(`http://localhost:5000/budget/${serviceId}`)
+                .then((response) => {
+                    if (response.data && response.data.data) {
+                        try {
+                            const loadedItems = JSON.parse(response.data.data);
+                            setItems(loadedItems);
+                        } catch (error) {
+                            console.error('Erro ao converter o JSON do orçamento:', error);
+                        }
+                    }
+                })
+                .catch((error) => {
+                    console.error('Erro ao buscar orçamento:', error);
+                });
+        }
+    }, [serviceId]);
+
     const handleSubmitItem = (e) => {
         e.preventDefault();
         if (editingItem) {
-            // Atualiza item existente
             const updatedItems = items.map((item) =>
                 item.id === editingItem.id ? { ...editingItem, ...formData } : item
             );
             setItems(updatedItems);
             setEditingItem(null);
         } else {
-            // Adiciona novo item com um id único (utilizando Date.now())
             const newItem = { id: Date.now(), ...formData };
             setItems([...items, newItem]);
         }
@@ -45,7 +64,7 @@ const Budget = () => {
 
     const handleSaveBudget = async () => {
         if (!serviceId) {
-            alert('Informe o ID do serviço.');
+            alert('ID do serviço não informado.');
             return;
         }
         const payload = {
@@ -54,7 +73,7 @@ const Budget = () => {
         };
 
         try {
-            // Pode ser necessário ajustar para PUT caso já exista orçamento para o serviço
+            // Se o orçamento já existe, a lógica pode ser adaptada para usar PUT
             const response = await axios.post('http://localhost:5000/budget', payload);
             if (response.status === 200 || response.status === 201) {
                 alert('Orçamento salvo com sucesso!');
@@ -70,7 +89,6 @@ const Budget = () => {
     return (
         <div className="container">
             <h2>Orçamento - Serviço {serviceId}</h2>
-
             <form onSubmit={handleSubmitItem}>
                 <div className="form-group">
                     <label>Nome:</label>
@@ -79,7 +97,7 @@ const Budget = () => {
                         name="nome"
                         value={formData.nome}
                         onChange={(e) => setFormData({ ...formData, nome: e.target.value })}
-                        placeholder="Nome do item"
+                        placeholder="Nome"
                         required
                     />
                 </div>
@@ -107,9 +125,7 @@ const Budget = () => {
                     />
                 </div>
                 <div className="button-group">
-                    <button type="submit">
-                        {editingItem ? 'Atualizar' : 'Adicionar'}
-                    </button>
+                    <button type="submit">{editingItem ? 'Atualizar' : 'Adicionar'}</button>
                     {editingItem && (
                         <button
                             type="button"
