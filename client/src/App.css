@@ -1,89 +1,40 @@
-* {
-  box-sizing: border-box;
+/* App.css */
+body {
+  font-family: Arial, sans-serif;
+  background-color: #f8f9fa;
+  color: #333;
   margin: 0;
   padding: 0;
-}
-
-body {
-  font-family: 'Arial', sans-serif;
-  background-color: #f2f2f2;
-  color: #333;
-  line-height: 1.6;
 }
 
 .container {
   max-width: 960px;
   margin: 20px auto;
   padding: 20px;
-  background-color: #fff;
+  background: #fff;
   border-radius: 8px;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
 
 h1, h2 {
+  color: #007bff;
+  text-align: center;
+}
+
+nav {
   text-align: center;
   margin-bottom: 20px;
-  color: #444;
 }
 
-form {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 20px;
-}
-
-.form-group {
-  flex: 1 1 300px;
-  display: flex;
-  flex-direction: column;
-}
-
-.form-group label {
-  margin-bottom: 5px;
+nav a {
+  margin: 0 10px;
+  color: #007bff;
+  text-decoration: none;
   font-weight: bold;
-  color: #555;
 }
 
-.form-group input,
-.form-group textarea,
-.form-group select {
-  padding: 10px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-  font-size: 1rem;
-}
-
-.form-group:not(:last-child) {
-  margin-bottom: 15px;
-}
-
-.button-group {
-  display: flex;
-  gap: 10px;
-  margin-top: 20px;
-}
-
-button {
-  padding: 10px 20px;
-  border: none;
-  border-radius: 5px;
-  background-color: #007BFF;
-  color: #fff;
-  font-size: 1rem;
-  cursor: pointer;
-  transition: background-color 0.2s ease-in-out;
-}
-
-button:hover {
-  background-color: #0056b3;
-}
-
-button.secondary {
-  background-color: #6c757d;
-}
-
-button.secondary:hover {
-  background-color: #5a6268;
+nav a:hover {
+  text-decoration: underline;
 }
 
 table {
@@ -92,20 +43,61 @@ table {
   margin-top: 20px;
 }
 
-table thead {
-  background-color: #007BFF;
-  color: #fff;
-}
-
-table th,
-table td {
+table th, table td {
+  border: 1px solid #dee2e6;
   padding: 10px;
-  border: 1px solid #ddd;
   text-align: left;
 }
 
-input[type="text"],
-input[type="date"],
-textarea {
+table th {
+  background-color: #f1f1f1;
+}
+
+.section-header {
+  background-color: #e9ecef;
+  font-weight: bold;
+}
+
+.button-group {
+  margin-top: 10px;
+  text-align: center;
+}
+
+.button-group button {
+  background: #007bff;
+  border: none;
+  padding: 10px 15px;
+  color: #fff;
+  border-radius: 4px;
+  cursor: pointer;
+  margin: 5px;
+  transition: background 0.3s ease;
+}
+
+.button-group button:hover {
+  background: #0056b3;
+}
+
+.form-group {
+  margin-bottom: 15px;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 5px;
+  font-weight: bold;
+}
+
+.form-group input,
+.form-group select {
   width: 100%;
+  padding: 8px;
+  border: 1px solid #ced4da;
+  border-radius: 4px;
+}
+
+.totals p {
+  font-size: 1.1em;
+  text-align: right;
+  margin: 5px 0;
 }

@@ -1,9 +1,13 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { library } from '@fortawesome/fontawesome-svg-core';
+import { fas } from '@fortawesome/free-solid-svg-icons';
 import ServiceList from './components/ServiceList';
 import ServiceForm from './components/ServiceForm';
 import './App.css';
 import Budget from "./components/Budget";
+
+library.add(fas);
 
 const App = () => {
   return (

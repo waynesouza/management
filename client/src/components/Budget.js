@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Link, useParams } from 'react-router-dom';
 import '../App.css';
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 const Budget = () => {
     const { serviceId } = useParams();
@@ -9,7 +10,7 @@ const Budget = () => {
     const [formData, setFormData] = useState({ nome: '', tipo: 'Peça', valor: '' });
     const [editingItem, setEditingItem] = useState(null);
 
-    // Busca o orçamento existente para o serviço e preenche a tabela
+    // Carrega orçamento existente se houver
     useEffect(() => {
         if (serviceId) {
             axios
@@ -73,7 +74,7 @@ const Budget = () => {
         };
 
         try {
-            // Se o orçamento já existe, a lógica pode ser adaptada para usar PUT
+            // Utilize PUT se o orçamento já existir
             const response = await axios.post('http://localhost:5000/budget', payload);
             if (response.status === 200 || response.status === 201) {
                 alert('Orçamento salvo com sucesso!');
@@ -125,16 +126,19 @@ const Budget = () => {
                     />
                 </div>
                 <div className="button-group">
-                    <button type="submit">{editingItem ? 'Atualizar' : 'Adicionar'}</button>
+                    <button type="submit" title={editingItem ? 'Atualizar item' : 'Adicionar item'}>
+                        <FontAwesomeIcon icon="edit" /> {editingItem ? 'Atualizar' : 'Adicionar'}
+                    </button>
                     {editingItem && (
                         <button
                             type="button"
+                            title="Cancelar edição"
                             onClick={() => {
                                 setEditingItem(null);
                                 setFormData({ nome: '', tipo: 'Peça', valor: '' });
                             }}
                         >
-                            Cancelar
+                            <FontAwesomeIcon icon="times" />
                         </button>
                     )}
                 </div>
@@ -150,6 +154,7 @@ const Budget = () => {
                 </tr>
                 </thead>
                 <tbody>
+                {/* Seção de Peças */}
                 <tr className="section-header">
                     <td colSpan="4">Peças</td>
                 </tr>
@@ -159,11 +164,28 @@ const Budget = () => {
                         <td>{item.tipo}</td>
                         <td>{Number(item.valor).toFixed(2)}</td>
                         <td>
-                            <button onClick={() => handleEdit(item)}>Editar</button>
-                            <button onClick={() => handleDelete(item.id)}>Remover</button>
+                            <button onClick={() => handleEdit(item)} title="Editar">
+                                <FontAwesomeIcon icon="edit" />
+                            </button>
+                            <button onClick={() => handleDelete(item.id)} title="Remover">
+                                <FontAwesomeIcon icon="trash-alt" />
+                            </button>
                         </td>
                     </tr>
                 ))}
+                {items.filter((item) => item.tipo === 'Peça').length > 0 && (
+                    <tr className="section-header">
+                        <td colSpan="2"></td>
+                        <td>
+                            <strong>Subtotal:</strong>
+                        </td>
+                        <td>
+                            <strong>R$ {subtotalPecas.toFixed(2)}</strong>
+                        </td>
+                    </tr>
+                )}
+
+                {/* Seção de Serviços */}
                 <tr className="section-header">
                     <td colSpan="4">Serviços</td>
                 </tr>
@@ -173,11 +195,27 @@ const Budget = () => {
                         <td>{item.tipo}</td>
                         <td>{Number(item.valor).toFixed(2)}</td>
                         <td>
-                            <button onClick={() => handleEdit(item)}>Editar</button>
-                            <button onClick={() => handleDelete(item.id)}>Remover</button>
+                            <button onClick={() => handleEdit(item)} title="Editar">
+                                <FontAwesomeIcon icon="edit" />
+                            </button>
+                            <button onClick={() => handleDelete(item.id)} title="Remover">
+                                <FontAwesomeIcon icon="trash-alt" />
+                            </button>
                         </td>
                     </tr>
                 ))}
+                {items.filter((item) => item.tipo === 'Serviço').length > 0 && (
+                    <tr className="section-header">
+                        <td colSpan="2"></td>
+                        <td>
+                            <strong>Subtotal:</strong>
+                        </td>
+                        <td>
+                            <strong>R$ {subtotalServicos.toFixed(2)}</strong>
+                        </td>
+                    </tr>
+                )}
+
                 {items.length === 0 && (
                     <tr>
                         <td colSpan="4">Nenhum item adicionado.</td>
@@ -188,23 +226,21 @@ const Budget = () => {
 
             <div className="totals">
                 <p>
-                    <strong>Subtotal Peças:</strong> R$ {subtotalPecas.toFixed(2)}
-                </p>
-                <p>
-                    <strong>Subtotal Serviços:</strong> R$ {subtotalServicos.toFixed(2)}
-                </p>
-                <p>
                     <strong>Total Geral:</strong> R$ {totalGeral.toFixed(2)}
                 </p>
             </div>
 
             <div className="button-group">
-                <button onClick={handleSaveBudget}>Salvar Orçamento</button>
+                <button onClick={handleSaveBudget} title="Salvar Orçamento">
+                    <FontAwesomeIcon icon="save" /> Salvar
+                </button>
             </div>
 
-            <div style={{ marginTop: '20px', textAlign: 'center' }}>
+            <div className="button-group">
                 <Link to="/">
-                    <button>Voltar</button>
+                    <button title="Voltar">
+                        <FontAwesomeIcon icon="arrow-left" /> Voltar
+                    </button>
                 </Link>
             </div>
         </div>

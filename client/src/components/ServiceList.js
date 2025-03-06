@@ -104,7 +104,9 @@ const ServiceList = () => {
                                 <button>Editar</button>
                             </Link>
                             <Link to={`/budget/${service.id}`}>
-                                <button>Criar/Editar Orçamento</button>
+                                <button title="Criar/Editar Orçamento">
+                                    <i className="fas fa-file-invoice-dollar"></i>
+                                </button>
                             </Link>
                         </td>
                     </tr>
