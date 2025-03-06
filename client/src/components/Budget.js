@@ -1,16 +1,17 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { Link, useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import '../App.css';
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 const Budget = () => {
     const { serviceId } = useParams();
+    const navigate = useNavigate();
     const [items, setItems] = useState([]);
     const [formData, setFormData] = useState({ nome: '', tipo: 'Peça', valor: '' });
     const [editingItem, setEditingItem] = useState(null);
 
-    // Carrega orçamento existente se houver
+    // Carrega orçamento existente, se houver
     useEffect(() => {
         if (serviceId) {
             axios
@@ -63,6 +64,12 @@ const Budget = () => {
         .reduce((acc, item) => acc + Number(item.valor), 0);
     const totalGeral = subtotalPecas + subtotalServicos;
 
+    const formatCurrency = (value) =>
+        new Intl.NumberFormat('pt-BR', {
+            style: 'currency',
+            currency: 'BRL'
+        }).format(value);
+
     const handleSaveBudget = async () => {
         if (!serviceId) {
             alert('ID do serviço não informado.');
@@ -70,11 +77,10 @@ const Budget = () => {
         }
         const payload = {
             service_id: serviceId,
-            data: JSON.stringify(items),
+            data: JSON.stringify(items)
         };
 
         try {
-            // Utilize PUT se o orçamento já existir
             const response = await axios.post('http://localhost:5000/budget', payload);
             if (response.status === 200 || response.status === 201) {
                 alert('Orçamento salvo com sucesso!');
@@ -98,7 +104,7 @@ const Budget = () => {
                         name="nome"
                         value={formData.nome}
                         onChange={(e) => setFormData({ ...formData, nome: e.target.value })}
-                        placeholder="Nome"
+                        placeholder="Nome do item"
                         required
                     />
                 </div>
@@ -127,7 +133,7 @@ const Budget = () => {
                 </div>
                 <div className="button-group">
                     <button type="submit" title={editingItem ? 'Atualizar item' : 'Adicionar item'}>
-                        <FontAwesomeIcon icon="edit" /> {editingItem ? 'Atualizar' : 'Adicionar'}
+                        <FontAwesomeIcon icon="edit" />
                     </button>
                     {editingItem && (
                         <button
@@ -148,7 +154,6 @@ const Budget = () => {
                 <thead>
                 <tr>
                     <th>Nome</th>
-                    <th>Tipo</th>
                     <th>Valor</th>
                     <th>Ações</th>
                 </tr>
@@ -156,92 +161,78 @@ const Budget = () => {
                 <tbody>
                 {/* Seção de Peças */}
                 <tr className="section-header">
-                    <td colSpan="4">Peças</td>
+                    <td colSpan="3">Peças</td>
                 </tr>
-                {items.filter((item) => item.tipo === 'Peça').map((item) => (
-                    <tr key={item.id}>
-                        <td>{item.nome}</td>
-                        <td>{item.tipo}</td>
-                        <td>{Number(item.valor).toFixed(2)}</td>
-                        <td>
-                            <button onClick={() => handleEdit(item)} title="Editar">
-                                <FontAwesomeIcon icon="edit" />
-                            </button>
-                            <button onClick={() => handleDelete(item.id)} title="Remover">
-                                <FontAwesomeIcon icon="trash-alt" />
-                            </button>
-                        </td>
-                    </tr>
-                ))}
+                {items
+                    .filter((item) => item.tipo === 'Peça')
+                    .map((item) => (
+                        <tr key={item.id}>
+                            <td>{item.nome}</td>
+                            <td>{formatCurrency(Number(item.valor))}</td>
+                            <td>
+                                <button onClick={() => handleEdit(item)} title="Editar">
+                                    <FontAwesomeIcon icon="edit" />
+                                </button>
+                                <button onClick={() => handleDelete(item.id)} title="Remover">
+                                    <FontAwesomeIcon icon="trash-alt" />
+                                </button>
+                            </td>
+                        </tr>
+                    ))}
                 {items.filter((item) => item.tipo === 'Peça').length > 0 && (
                     <tr className="section-header">
-                        <td colSpan="2"></td>
-                        <td>
-                            <strong>Subtotal:</strong>
-                        </td>
-                        <td>
-                            <strong>R$ {subtotalPecas.toFixed(2)}</strong>
-                        </td>
+                        <td style={{ textAlign: 'left' }}><strong>Subtotal:</strong></td>
+                        <td>{formatCurrency(subtotalPecas)}</td>
+                        <td></td>
                     </tr>
                 )}
 
                 {/* Seção de Serviços */}
                 <tr className="section-header">
-                    <td colSpan="4">Serviços</td>
+                    <td colSpan="3">Serviços</td>
                 </tr>
-                {items.filter((item) => item.tipo === 'Serviço').map((item) => (
-                    <tr key={item.id}>
-                        <td>{item.nome}</td>
-                        <td>{item.tipo}</td>
-                        <td>{Number(item.valor).toFixed(2)}</td>
-                        <td>
-                            <button onClick={() => handleEdit(item)} title="Editar">
-                                <FontAwesomeIcon icon="edit" />
-                            </button>
-                            <button onClick={() => handleDelete(item.id)} title="Remover">
-                                <FontAwesomeIcon icon="trash-alt" />
-                            </button>
-                        </td>
-                    </tr>
-                ))}
+                {items
+                    .filter((item) => item.tipo === 'Serviço')
+                    .map((item) => (
+                        <tr key={item.id}>
+                            <td>{item.nome}</td>
+                            <td>{formatCurrency(Number(item.valor))}</td>
+                            <td>
+                                <button onClick={() => handleEdit(item)} title="Editar">
+                                    <FontAwesomeIcon icon="edit" />
+                                </button>
+                                <button onClick={() => handleDelete(item.id)} title="Remover">
+                                    <FontAwesomeIcon icon="trash-alt" />
+                                </button>
+                            </td>
+                        </tr>
+                    ))}
                 {items.filter((item) => item.tipo === 'Serviço').length > 0 && (
                     <tr className="section-header">
-                        <td colSpan="2"></td>
-                        <td>
-                            <strong>Subtotal:</strong>
-                        </td>
-                        <td>
-                            <strong>R$ {subtotalServicos.toFixed(2)}</strong>
-                        </td>
+                        <td style={{ textAlign: 'left' }}><strong>Subtotal:</strong></td>
+                        <td>{formatCurrency(subtotalServicos)}</td>
+                        <td></td>
                     </tr>
                 )}
-
                 {items.length === 0 && (
                     <tr>
-                        <td colSpan="4">Nenhum item adicionado.</td>
+                        <td colSpan="3">Nenhum item adicionado.</td>
                     </tr>
                 )}
                 </tbody>
             </table>
 
             <div className="totals">
-                <p>
-                    <strong>Total Geral:</strong> R$ {totalGeral.toFixed(2)}
-                </p>
+                <p><strong>Total Geral:</strong> {formatCurrency(totalGeral)}</p>
             </div>
 
-            <div className="button-group">
+            <div className="button-group" style={{ display: 'flex', justifyContent: 'center' }}>
                 <button onClick={handleSaveBudget} title="Salvar Orçamento">
                     <FontAwesomeIcon icon="save" /> Salvar
                 </button>
-            </div>
-
-            <div className="button-group">
-                <Link to="/">
-                    <button title="Voltar">
-                        <FontAwesomeIcon icon="arrow-left" /> Voltar
-                    </button>
-                </Link>
+                <button onClick={() => navigate(-1)} title="Voltar" style={{ marginLeft: '10px' }}>
+                    <FontAwesomeIcon icon="arrow-left" /> Voltar
+                </button>
             </div>
         </div>
     );
