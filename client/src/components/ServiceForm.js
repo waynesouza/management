@@ -148,7 +148,7 @@ const ServiceForm = () => {
                 </div>
                 <div className="form-group">
                     <label>Descrição:</label>
-                    <textarea className="textarea" name="description" value={service.description} onChange={handleChange} placeholder="Digite a descrição" cols="3"></textarea>
+                    <textarea className="textarea" name="description" value={service.description} onChange={handleChange} placeholder="Digite a descrição" rows="3"></textarea>
                 </div>
                 <div className="form-group">
                     <label>Recibo/Certificado:</label>
@@ -156,7 +156,7 @@ const ServiceForm = () => {
                 </div>
                 <div className="form-group">
                     <label>Observações:</label>
-                    <textarea className="textarea" name="observations" value={service.observations} onChange={handleChange} placeholder="Digite as observações" cols="3"></textarea>
+                    <textarea className="textarea" name="observations" value={service.observations} onChange={handleChange} placeholder="Digite as observações" rows="3"></textarea>
                 </div>
                 <div className="button-group">
                     <button type="submit" style={{ width: "100px" }}>

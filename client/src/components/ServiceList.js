@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import '../App.css';
 
 const ServiceList = () => {
@@ -72,14 +73,20 @@ const ServiceList = () => {
                     />
                 </div>
                 <div className="button-group">
-                    <button type="submit">Filtrar</button>
+                    <button type="submit" title="Filtrar">
+                        <FontAwesomeIcon icon="search" /> Filtrar
+                    </button>
                 </div>
             </form>
-            <div style={{ marginTop: '20px', textAlign: 'center' }}>
+
+            <div className="button-group" style={{marginTop: '20px', textAlign: 'center'}}>
                 <Link to="/create">
-                    <button>Criar Novo Serviço</button>
+                    <button title="Criar Novo Serviço">
+                        <FontAwesomeIcon icon="plus"/> Criar Novo Serviço
+                    </button>
                 </Link>
             </div>
+
             <table>
                 <thead>
                 <tr>
@@ -101,11 +108,13 @@ const ServiceList = () => {
                         <td>{service.license_plate}</td>
                         <td>
                             <Link to={`/edit/${service.id}`}>
-                                <button>Editar</button>
+                                <button title="Editar" style={{ marginRight: '5px' }}>
+                                    <FontAwesomeIcon icon="edit" />
+                                </button>
                             </Link>
                             <Link to={`/budget/${service.id}`}>
                                 <button title="Criar/Editar Orçamento">
-                                    <i className="fas fa-file-invoice-dollar"></i>
+                                    <FontAwesomeIcon icon="file-invoice-dollar" />
                                 </button>
                             </Link>
                         </td>
