@@ -89,12 +89,20 @@ table th {
 }
 
 .form-group input,
+.form-group textarea,
 .form-group select {
   width: 100%;
   padding: 8px;
   border: 1px solid #ced4da;
   border-radius: 4px;
   box-sizing: border-box;
+}
+
+input::placeholder,
+textarea::placeholder,
+select::placeholder {
+  font-family: inherit !important;
+  font-size: inherit !important;
 }
 
 .totals p {

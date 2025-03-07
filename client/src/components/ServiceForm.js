@@ -1,48 +1,49 @@
-import React, { useState, useEffect } from 'react';
-import axios from 'axios';
-import { useNavigate, useParams, Link } from 'react-router-dom';
-import '../App.css';
+import React, { useState, useEffect } from "react";
+import axios from "axios";
+import { useNavigate, useParams, Link } from "react-router-dom";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import "../App.css";
 
 const ServiceForm = () => {
     const { id } = useParams();
     const navigate = useNavigate();
     const [service, setService] = useState({
-        os: '',
-        start_time: '',
-        end_time: '',
-        customer_name: '',
-        address: '',
-        cpf: '',
-        phone: '',
-        workshop: '',
-        car: '',
-        license_plate: '',
-        motor: '',
-        motor_number: '',
-        km: '',
-        cylinders: '',
-        fixed: '',
-        movable: '',
-        price: '',
-        payment_method: '',
-        description: '',
-        receipt_certificate: '',
-        observations: ''
+        os: "",
+        start_time: "",
+        end_time: "",
+        customer_name: "",
+        address: "",
+        cpf: "",
+        phone: "",
+        workshop: "",
+        car: "",
+        license_plate: "",
+        motor: "",
+        motor_number: "",
+        km: "",
+        cylinders: "",
+        fixed: "",
+        movable: "",
+        price: "",
+        payment_method: "",
+        description: "",
+        receipt_certificate: "",
+        observations: ""
     });
 
     useEffect(() => {
         if (id) {
             axios
-                .get('http://localhost:5000/services', { params: { id } })
+                .get("http://localhost:5000/services", { params: { id } })
                 .then((response) => {
                     if (response.data.length > 0) {
                         const serv = response.data[0];
-                        if (serv.start_time) serv.start_time = serv.start_time.split('T')[0];
-                        if (serv.end_time) serv.end_time = serv.end_time.split('T')[0];
+                        if (serv.start_time) serv.start_time = serv.start_time.split("T")[0];
+                        if (serv.end_time) serv.end_time = serv.end_time.split("T")[0];
                         setService(serv);
                     }
                 })
-                .catch((error) => console.error('Erro ao buscar serviço:', error));
+                .catch((error) => console.error("Erro ao buscar serviço:", error));
         }
     }, [id]);
 
@@ -52,9 +53,8 @@ const ServiceForm = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-
         const preparedService = Object.keys(service).reduce((acc, key) => {
-            acc[key] = service[key] === '' ? null : service[key];
+            acc[key] = service[key] === "" ? null : service[key];
             return acc;
         }, {});
 
@@ -62,17 +62,17 @@ const ServiceForm = () => {
             if (id) {
                 await axios.put(`http://localhost:5000/services/${id}`, preparedService);
             } else {
-                await axios.post('http://localhost:5000/services', preparedService);
+                await axios.post("http://localhost:5000/services", preparedService);
             }
-            navigate('/');
+            navigate("/");
         } catch (error) {
-            console.error('Erro ao salvar o serviço:', error);
+            console.error("Erro ao salvar o serviço:", error);
         }
     };
 
     return (
         <div className="container">
-            <h2>{id ? 'Editar Serviço' : 'Criar Serviço'}</h2>
+            <h2>{id ? "Editar Serviço" : "Criar Serviço"}</h2>
             <form onSubmit={handleSubmit}>
                 <div className="form-group">
                     <label>OS:</label>
@@ -148,7 +148,7 @@ const ServiceForm = () => {
                 </div>
                 <div className="form-group">
                     <label>Descrição:</label>
-                    <textarea name="description" value={service.description} onChange={handleChange} placeholder="Digite a descrição"></textarea>
+                    <textarea className="textarea" name="description" value={service.description} onChange={handleChange} placeholder="Digite a descrição" cols="3"></textarea>
                 </div>
                 <div className="form-group">
                     <label>Recibo/Certificado:</label>
@@ -156,12 +156,16 @@ const ServiceForm = () => {
                 </div>
                 <div className="form-group">
                     <label>Observações:</label>
-                    <textarea name="observations" value={service.observations} onChange={handleChange} placeholder="Digite as observações"></textarea>
+                    <textarea className="textarea" name="observations" value={service.observations} onChange={handleChange} placeholder="Digite as observações" cols="3"></textarea>
                 </div>
                 <div className="button-group">
-                    <button type="submit">{id ? 'Atualizar' : 'Criar'}</button>
+                    <button type="submit" style={{ width: "100px" }}>
+                        <FontAwesomeIcon icon="check" /> { id ? "Atualizar" : "Criar" }
+                    </button>
                     <Link to="/">
-                        <button type="button" className="secondary">Cancelar</button>
+                        <button type="button" className="secondary" style={{ width: "100px" }}>
+                            <FontAwesomeIcon icon="arrow-left" /> Cancelar
+                        </button>
                     </Link>
                 </div>
             </form>
