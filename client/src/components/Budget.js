@@ -11,7 +11,6 @@ const Budget = () => {
     const [formData, setFormData] = useState({ nome: '', tipo: 'Peça', valor: '' });
     const [editingItem, setEditingItem] = useState(null);
 
-    // Carrega orçamento existente, se houver
     useEffect(() => {
         if (serviceId) {
             axios
@@ -132,8 +131,8 @@ const Budget = () => {
                     />
                 </div>
                 <div className="button-group">
-                    <button type="submit" title={editingItem ? 'Atualizar item' : 'Adicionar item'}>
-                        <FontAwesomeIcon icon="edit" />
+                    <button type="submit" title={editingItem ? 'Editar item' : 'Adicionar item'}>
+                        <FontAwesomeIcon icon="edit" /> {editingItem ? 'Editar item' : 'Adicionar item'}
                     </button>
                     {editingItem && (
                         <button
@@ -144,7 +143,7 @@ const Budget = () => {
                                 setFormData({ nome: '', tipo: 'Peça', valor: '' });
                             }}
                         >
-                            <FontAwesomeIcon icon="times" />
+                            <FontAwesomeIcon icon="times" /> Cancelar
                         </button>
                     )}
                 </div>
@@ -170,7 +169,7 @@ const Budget = () => {
                             <td>{item.nome}</td>
                             <td>{formatCurrency(Number(item.valor))}</td>
                             <td>
-                                <button onClick={() => handleEdit(item)} title="Editar">
+                                <button onClick={() => handleEdit(item)} title="Editar" style={{ marginRight: '5px' }}>
                                     <FontAwesomeIcon icon="edit" />
                                 </button>
                                 <button onClick={() => handleDelete(item.id)} title="Remover">
@@ -186,7 +185,9 @@ const Budget = () => {
                         <td></td>
                     </tr>
                 )}
-
+                <tr>
+                    <td colSpan="3" style={{ border: 'none', height: '15px' }}></td>
+                </tr>
                 {/* Seção de Serviços */}
                 <tr className="section-header">
                     <td colSpan="3">Serviços</td>
@@ -198,7 +199,7 @@ const Budget = () => {
                             <td>{item.nome}</td>
                             <td>{formatCurrency(Number(item.valor))}</td>
                             <td>
-                                <button onClick={() => handleEdit(item)} title="Editar">
+                                <button onClick={() => handleEdit(item)} title="Editar" style={{ marginRight: '5px' }}>
                                     <FontAwesomeIcon icon="edit" />
                                 </button>
                                 <button onClick={() => handleDelete(item.id)} title="Remover">
@@ -222,8 +223,8 @@ const Budget = () => {
                 </tbody>
             </table>
 
-            <div className="totals">
-                <p><strong>Total Geral:</strong> {formatCurrency(totalGeral)}</p>
+            <div className="totals" style={{ textAlign: 'left', marginTop: '20px' }}>
+                <p><strong>Total:</strong> {formatCurrency(totalGeral)}</p>
             </div>
 
             <div className="button-group" style={{ display: 'flex', justifyContent: 'center' }}>

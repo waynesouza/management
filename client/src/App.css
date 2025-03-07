@@ -94,10 +94,11 @@ table th {
   padding: 8px;
   border: 1px solid #ced4da;
   border-radius: 4px;
+  box-sizing: border-box;
 }
 
 .totals p {
   font-size: 1.1em;
-  text-align: right;
+  text-align: left;
   margin: 5px 0;
 }
