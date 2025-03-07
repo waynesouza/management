@@ -110,3 +110,28 @@ select::placeholder {
   text-align: left;
   margin: 5px 0;
 }
+
+.pagination-btn {
+  background: #6c757d;
+  border: none;
+  padding: 8px 12px;
+  color: #fff;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background 0.3s ease;
+  min-width: 40px;
+  margin: 0 2px;
+}
+
+.pagination-btn:hover:not(:disabled) {
+  background: #5a6268;
+}
+
+.pagination-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.pagination-btn.active {
+  background: #343a40;
+}

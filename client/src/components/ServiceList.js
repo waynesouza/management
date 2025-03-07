@@ -11,6 +11,8 @@ const ServiceList = () => {
         customer_name: '',
         license_plate: ''
     });
+    const [currentPage, setCurrentPage] = useState(1);
+    const [itemsPerPage, setItemsPerPage] = useState(10);
 
     const fetchServices = useCallback(async () => {
         const params = {};
@@ -20,6 +22,7 @@ const ServiceList = () => {
         try {
             const response = await axios.get('http://localhost:5000/services', { params });
             setServices(response.data);
+            setCurrentPage(1); // reinicia para a primeira página ao aplicar filtros
         } catch (error) {
             console.error('Erro ao buscar serviços:', error);
         }
@@ -36,6 +39,20 @@ const ServiceList = () => {
     const handleFilterSubmit = (e) => {
         e.preventDefault();
         fetchServices().then();
+    };
+
+    const indexOfLastItem = currentPage * itemsPerPage;
+    const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+    const currentServices = services.slice(indexOfFirstItem, indexOfLastItem);
+    const totalPages = Math.ceil(services.length / itemsPerPage);
+
+    const paginate = (pageNumber) => {
+        setCurrentPage(pageNumber);
+    };
+
+    const handleItemsPerPageChange = (e) => {
+        setItemsPerPage(parseInt(e.target.value));
+        setCurrentPage(1);
     };
 
     return (
@@ -79,10 +96,10 @@ const ServiceList = () => {
                 </div>
             </form>
 
-            <div className="button-group" style={{marginTop: '20px', textAlign: 'center'}}>
+            <div className="button-group" style={{ marginTop: '20px', textAlign: 'center' }}>
                 <Link to="/create">
                     <button title="Criar Novo Serviço">
-                        <FontAwesomeIcon icon="plus"/> Criar Novo Serviço
+                        <FontAwesomeIcon icon="plus" /> Criar Novo Serviço
                     </button>
                 </Link>
             </div>
@@ -99,7 +116,7 @@ const ServiceList = () => {
                 </tr>
                 </thead>
                 <tbody>
-                {services.map((service) => (
+                {currentServices.map((service) => (
                     <tr key={service.id}>
                         <td>{service.os}</td>
                         <td>{service.start_time ? new Date(service.start_time).toLocaleDateString('pt-BR') : ''}</td>
@@ -108,7 +125,7 @@ const ServiceList = () => {
                         <td>{service.license_plate}</td>
                         <td>
                             <Link to={`/edit/${service.id}`}>
-                                <button title="Editar" style={{ marginRight: '5px' }}>
+                                <button title="Editar">
                                     <FontAwesomeIcon icon="edit" />
                                 </button>
                             </Link>
@@ -127,6 +144,43 @@ const ServiceList = () => {
                 )}
                 </tbody>
             </table>
+
+            {/* Controles de Paginação */}
+            <div className="pagination" style={{ marginTop: '20px', textAlign: 'center' }}>
+                <div className="button-group" style={{ justifyContent: 'center', gap: '5px' }}>
+                    <select value={itemsPerPage} onChange={handleItemsPerPageChange}>
+                        <option value="10">10 registros</option>
+                        <option value="25">25 registros</option>
+                        <option value="50">50 registros</option>
+                    </select>
+                    <button
+                        className="pagination-btn"
+                        onClick={() => paginate(currentPage - 1)}
+                        disabled={currentPage === 1}
+                        title="Página anterior"
+                    >
+                        <FontAwesomeIcon icon="arrow-left" />
+                    </button>
+                    {Array.from({ length: totalPages }, (_, index) => (
+                        <button
+                            key={index + 1}
+                            onClick={() => paginate(index + 1)}
+                            className={currentPage === index + 1 ? 'active' : ''}
+                            title={`Página ${index + 1}`}
+                        >
+                            {index + 1}
+                        </button>
+                    ))}
+                    <button
+                        className="pagination-btn"
+                        onClick={() => paginate(currentPage + 1)}
+                        disabled={currentPage === totalPages}
+                        title="Próxima página"
+                    >
+                        <FontAwesomeIcon icon="arrow-right" />
+                    </button>
+                </div>
+            </div>
         </div>
     );
 };
