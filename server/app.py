@@ -3,6 +3,7 @@ from flask_cors import CORS
 from config import Config
 from models import db, Budget, Service
 from datetime import datetime
+from server.utils.export_pdf import export_budget_pdf
 
 app = Flask(__name__)
 app.config.from_object(Config)
@@ -112,6 +113,16 @@ def delete_budget(service_id):
     except Exception as e:
         db.session.rollback()
         return jsonify({'error': str(e)}), 500
+
+
+@app.route('/budget/export/<int:service_id>', methods=['GET'])
+def export_budget(service_id):
+    response, error = export_budget_pdf(service_id)
+    if error:
+        return jsonify({'error': error}), 500
+    if response is None:
+        return jsonify({'error': 'Budget not found'}), 404
+    return response
 
 
 if __name__ == '__main__':
