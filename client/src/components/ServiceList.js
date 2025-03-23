@@ -130,7 +130,7 @@ const ServiceList = () => {
                                 </button>
                             </Link>
                             <Link to={`/budget/${service.id}`}>
-                                <button title="Criar/Editar Orçamento">
+                                <button title="Criar/Editar Orçamento" style={{ marginLeft: '5px' }}>
                                     <FontAwesomeIcon icon="file-invoice-dollar" />
                                 </button>
                             </Link>

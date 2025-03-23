@@ -21,12 +21,12 @@ const Budget = () => {
                             const loadedItems = JSON.parse(response.data.data);
                             setItems(loadedItems);
                         } catch (error) {
-                            console.error('Erro ao converter o JSON do orçamento:', error);
+                            console.error('Error processing budget JSON:', error);
                         }
                     }
                 })
                 .catch((error) => {
-                    console.error('Erro ao buscar orçamento:', error);
+                    console.error('Error fetching budget:', error);
                 });
         }
     }, [serviceId]);
@@ -87,9 +87,13 @@ const Budget = () => {
                 alert('Erro ao salvar orçamento.');
             }
         } catch (error) {
-            console.error('Erro ao salvar orçamento:', error);
+            console.error('Error saving budget:', error);
             alert('Erro ao salvar orçamento.');
         }
+    };
+
+    const handleExportPDF = () => {
+        window.open(`http://localhost:5000/budget/export/${serviceId}`, '_blank');
     };
 
     return (
@@ -158,7 +162,7 @@ const Budget = () => {
                 </tr>
                 </thead>
                 <tbody>
-                {/* Seção de Peças */}
+                {/* Section for Peças */}
                 <tr className="section-header">
                     <td colSpan="3">Peças</td>
                 </tr>
@@ -185,10 +189,11 @@ const Budget = () => {
                         <td></td>
                     </tr>
                 )}
+                {/* Spacer between sections */}
                 <tr>
                     <td colSpan="3" style={{ border: 'none', height: '15px' }}></td>
                 </tr>
-                {/* Seção de Serviços */}
+                {/* Section for Serviços */}
                 <tr className="section-header">
                     <td colSpan="3">Serviços</td>
                 </tr>
@@ -233,6 +238,9 @@ const Budget = () => {
                 </button>
                 <button onClick={() => navigate(-1)} title="Voltar" style={{ marginLeft: '10px' }}>
                     <FontAwesomeIcon icon="arrow-left" /> Voltar
+                </button>
+                <button onClick={handleExportPDF} title="Imprimir" style={{ marginLeft: '10px' }}>
+                    <FontAwesomeIcon icon="print" /> Imprimir
                 </button>
             </div>
         </div>

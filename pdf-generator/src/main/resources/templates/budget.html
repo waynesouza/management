@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>Orçamento - Serviço {{ service_id }}</title>
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: Arial, sans-serif;
+            font-size: 16px;
+            line-height: 1.4;
+        }
+        h2 {
+            text-align: center;
+            margin-top: 20px;
+            margin-bottom: 20px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            margin-bottom: 20px;
+        }
+        th, td {
+            border: 1px solid #333;
+            padding: 8px;
+            text-align: left;
+            vertical-align: middle;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+        .header-table {
+            width: 100%;
+            margin-bottom: 30px;
+        }
+        .header-table td {
+            border: none;
+        }
+        .logo {
+            width: 150px;
+            height: auto;
+        }
+        .company-info {
+            text-align: left;
+        }
+        .company-info p {
+            margin: 0;
+            line-height: 1.2;
+        }
+        .section-header {
+            background-color: #e9ecef;
+            font-weight: bold;
+        }
+        .spacer {
+            height: 15px;
+        }
+        .spacer td {
+            border: none;
+        }
+        .total {
+            text-align: right;
+            margin-top: 20px;
+            font-size: 18px;
+        }
+    </style>
+</head>
+<body>
+<table class="header-table">
+    <tr>
+        <td style="width:30%; text-align:center;">
+            <img src="@{/images/logo.png}" alt="Company Logo" class="logo">
+        </td>
+        <td style="width:70%;" class="company-info">
+            <!-- Informações da empresa podem ser adicionadas aqui -->
+        </td>
+    </tr>
+</table>
+
+<h2>Orçamento - Serviço {{ service_id }}</h2>
+
+{% if parts|length > 0 %}
+<table>
+    <thead>
+    <tr>
+        <th colspan="2" class="section-header">Peças</th>
+    </tr>
+    <tr>
+        <th>Nome</th>
+        <th>Valor</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for item in parts %}
+    <tr>
+        <td>{{ item.nome }}</td>
+        <td>R$ {{ "%.2f"|format(item.valor|float).replace(".", ",") }}</td>
+    </tr>
+    {% endfor %}
+    <tr>
+        <td style="text-align: right;"><strong>Subtotal Peças:</strong></td>
+        <td><strong>{{ subtotal_parts_str }}</strong></td>
+    </tr>
+    </tbody>
+</table>
+{% endif %}
+
+{% if services|length > 0 %}
+<table>
+    <thead>
+    <tr>
+        <th colspan="2" class="section-header">Serviços</th>
+    </tr>
+    <tr>
+        <th>Nome</th>
+        <th>Valor</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for item in services %}
+    <tr>
+        <td>{{ item.nome }}</td>
+        <td>R$ {{ "%.2f"|format(item.valor|float).replace(".", ",") }}</td>
+    </tr>
+    {% endfor %}
+    <tr>
+        <td style="text-align: right;"><strong>Subtotal Serviços:</strong></td>
+        <td><strong>{{ subtotal_services_str }}</strong></td>
+    </tr>
+    </tbody>
+</table>
+{% endif %}
+
+<div class="total">
+    <strong>Valor Total: {{ total_str }}</strong>
+</div>
+</body>
+</html>

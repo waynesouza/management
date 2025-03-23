@@ -3,7 +3,7 @@ from flask_cors import CORS
 from config import Config
 from models import db, Budget, Service
 from datetime import datetime
-from server.utils.export_pdf import export_budget_pdf
+from utils.export_pdf import export_budget_pdf
 
 app = Flask(__name__)
 app.config.from_object(Config)
