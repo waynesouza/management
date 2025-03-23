@@ -20,10 +20,19 @@ services:
     restart: always
     depends_on:
       - db
+      - pdf-generator
     ports:
       - "5000:5000"
     environment:
       DATABASE_URI: "postgresql://user:password@db:5432/management_db"
+      PDF_GENERATOR_URI: "http://pdf-generator:8080"
+
+  pdf-generator:
+    build: ./pdf-generator
+    container_name: management-pdf-generator
+    restart: always
+    ports:
+      - "8080:8080"
 
   client:
     build: ./client

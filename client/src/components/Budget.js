@@ -92,8 +92,14 @@ const Budget = () => {
         }
     };
 
-    const handleExportPDF = () => {
-        window.open(`http://localhost:5000/budget/export/${serviceId}`, '_blank');
+    const handleExportPDF = async () => {
+        const response = await axios.get(`http://localhost:5000/budget/export/${serviceId}`,
+            { responseType: 'blob' });
+
+        const file = new Blob([response.data], { type: 'application/pdf' });
+        const fileURL = URL.createObjectURL(file);
+
+        window.open(fileURL, '_blank');
     };
 
     return (

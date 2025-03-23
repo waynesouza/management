@@ -3,7 +3,6 @@ package com.example.demo.adapter.util;
 import com.itextpdf.html2pdf.ConverterProperties;
 import com.itextpdf.html2pdf.HtmlConverter;
 import org.springframework.stereotype.Component;
-
 import java.io.ByteArrayOutputStream;
 
 @Component

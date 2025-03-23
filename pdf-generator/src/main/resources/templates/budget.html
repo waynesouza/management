@@ -1,12 +1,12 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Orçamento - Serviço {{ service_id }}</title>
+    <title>Orçamento - Serviço [[${data.serviceId}]]</title>
     <style>
         @page {
             size: A4;
-            margin: 2cm;
+            margin: 0 1cm 1cm 1cm;
         }
         body {
             font-family: Arial, sans-serif;
@@ -25,6 +25,7 @@
             margin-bottom: 20px;
         }
         th, td {
+            width: 50%;
             border: 1px solid #333;
             padding: 8px;
             text-align: left;
@@ -62,9 +63,17 @@
             border: none;
         }
         .total {
-            text-align: right;
+            text-align: left;
             margin-top: 20px;
             font-size: 18px;
+        }
+        .footer {
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            text-align: center;
+            padding: 10px;
+            font-size: 12px;
         }
     </style>
 </head>
@@ -72,70 +81,74 @@
 <table class="header-table">
     <tr>
         <td style="width:30%; text-align:center;">
-            <img src="@{/images/logo.png}" alt="Company Logo" class="logo">
+            <img th:src="'data:image/png;base64,' + ${logo}" alt="Company Logo" class="logo">
         </td>
         <td style="width:70%;" class="company-info">
-            <!-- Informações da empresa podem ser adicionadas aqui -->
+            <p><strong>Retifica Souza</strong></p>
+            <p><strong>CNPJ:</strong> 51.898.396/0001-77</p>
+            <p><strong>Endereço:</strong> Rua Geraldo Roberto de Oliveira, 228, Ouro Verde, Formiga/MG</p>
+            <p><strong>Telefone:</strong> (37) 99956-7542</p>
         </td>
     </tr>
 </table>
 
-<h2>Orçamento - Serviço {{ service_id }}</h2>
+<h2>Orçamento - Serviço [[${data.serviceId}]]</h2>
 
-{% if parts|length > 0 %}
-<table>
-    <thead>
-    <tr>
-        <th colspan="2" class="section-header">Peças</th>
-    </tr>
-    <tr>
-        <th>Nome</th>
-        <th>Valor</th>
-    </tr>
-    </thead>
-    <tbody>
-    {% for item in parts %}
-    <tr>
-        <td>{{ item.nome }}</td>
-        <td>R$ {{ "%.2f"|format(item.valor|float).replace(".", ",") }}</td>
-    </tr>
-    {% endfor %}
-    <tr>
-        <td style="text-align: right;"><strong>Subtotal Peças:</strong></td>
-        <td><strong>{{ subtotal_parts_str }}</strong></td>
-    </tr>
-    </tbody>
-</table>
-{% endif %}
+<div class="company-info">
+    <p th:text="'Cliente: ' + ${data.customerName}">Cliente: Nome do cliente</p>
+    <p th:text="'Oficina: ' + ${data.workshop}">Oficina: Nome da oficina</p>
+    <p th:text="'Veiculo: ' + ${data.car}">Veiculo: Nome do veiculo</p>
+    <p th:text="'Placa: ' + ${data.licensePlate}">Placa: Placa do veiculo</p>
+</div>
 
-{% if services|length > 0 %}
-<table>
-    <thead>
-    <tr>
-        <th colspan="2" class="section-header">Serviços</th>
-    </tr>
-    <tr>
-        <th>Nome</th>
-        <th>Valor</th>
-    </tr>
-    </thead>
-    <tbody>
-    {% for item in services %}
-    <tr>
-        <td>{{ item.nome }}</td>
-        <td>R$ {{ "%.2f"|format(item.valor|float).replace(".", ",") }}</td>
-    </tr>
-    {% endfor %}
-    <tr>
-        <td style="text-align: right;"><strong>Subtotal Serviços:</strong></td>
-        <td><strong>{{ subtotal_services_str }}</strong></td>
-    </tr>
-    </tbody>
-</table>
-{% endif %}
+<!-- Verifica se existem peças -->
+<div th:if="${data.parts.size() > 0}">
+    <table>
+        <thead>
+        <tr>
+            <th>Peças</th>
+            <th>Valor</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="item : ${data.parts}">
+            <td th:text="${item.nome}">Nome da Peça</td>
+            <td th:text="'R$ ' + ${#numbers.formatDecimal(item.valor, 2, 2, 'COMMA')}">Valor da Peça</td>
+        </tr>
+        <tr>
+            <td colspan="2"><strong th:text="'Subtotal Peças: ' + ${data.subTotalParts}">R$ 0,00</strong></td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+
+<!-- Verifica se existem serviços -->
+<div th:if="${data.services.size() > 0}">
+    <table>
+        <thead>
+        <tr>
+            <th>Serviços</th>
+            <th>Valor</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="item : ${data.services}">
+            <td th:text="${item.nome}">Nome do Serviço</td>
+            <td th:text="'R$ ' + ${item.valor}">Valor do Serviço</td>
+        </tr>
+        <tr>
+            <td colspan="2"><strong th:text="'Subtotal Serviços: ' + ${data.subTotalServices}">R$ 0,00</strong></td>
+        </tr>
+        </tbody>
+    </table>
+</div>
 
 <div class="total">
-    <strong>Valor Total: {{ total_str }}</strong>
+    <strong>Valor Total: <span th:text="${data.total}">R$ 0,00</span></strong>
+</div>
+
+<div class="footer">
+    <p th:text="'Formiga, ' + ${currentDate}">Cidade, DD de MM de YYYY</p>
 </div>
 </body>
 </html>

@@ -11,7 +11,6 @@ Flask = "^2.2.2"
 Flask-SQLAlchemy = "^3.0.2"
 Flask-Cors = "^3.0.10"
 psycopg2-binary = "^2.9.6"
-weasyprint = "^65.0"
 
 [tool.poetry.group.dev.dependencies]
 pytest = "^7.2.0"
