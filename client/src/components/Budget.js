@@ -9,6 +9,7 @@ const Budget = () => {
     const navigate = useNavigate();
     const [items, setItems] = useState([]);
     const [formData, setFormData] = useState({ nome: '', tipo: 'Peça', valor: '' });
+    const [observations, setObservations] = useState('');
     const [editingItem, setEditingItem] = useState(null);
 
     useEffect(() => {
@@ -20,6 +21,7 @@ const Budget = () => {
                         try {
                             const loadedItems = JSON.parse(response.data.data);
                             setItems(loadedItems);
+                            setObservations(response.data.observations || '');
                         } catch (error) {
                             console.error('Error processing budget JSON:', error);
                         }
@@ -76,7 +78,8 @@ const Budget = () => {
         }
         const payload = {
             service_id: serviceId,
-            data: JSON.stringify(items)
+            data: JSON.stringify(items),
+            observations: observations
         };
 
         try {
@@ -112,7 +115,7 @@ const Budget = () => {
                         type="text"
                         name="nome"
                         value={formData.nome}
-                        onChange={(e) => setFormData({ ...formData, nome: e.target.value })}
+                        onChange={(e) => setFormData({...formData, nome: e.target.value})}
                         placeholder="Nome do item"
                         required
                     />
@@ -122,7 +125,7 @@ const Budget = () => {
                     <select
                         name="tipo"
                         value={formData.tipo}
-                        onChange={(e) => setFormData({ ...formData, tipo: e.target.value })}
+                        onChange={(e) => setFormData({...formData, tipo: e.target.value})}
                     >
                         <option value="Peça">Peça</option>
                         <option value="Serviço">Serviço</option>
@@ -135,14 +138,14 @@ const Budget = () => {
                         step="0.01"
                         name="valor"
                         value={formData.valor}
-                        onChange={(e) => setFormData({ ...formData, valor: e.target.value })}
+                        onChange={(e) => setFormData({...formData, valor: e.target.value})}
                         placeholder="Valor"
                         required
                     />
                 </div>
                 <div className="button-group">
                     <button type="submit" title={editingItem ? 'Editar item' : 'Adicionar item'}>
-                        <FontAwesomeIcon icon="edit" /> {editingItem ? 'Editar item' : 'Adicionar item'}
+                        <FontAwesomeIcon icon="edit"/> {editingItem ? 'Editar item' : 'Adicionar item'}
                     </button>
                     {editingItem && (
                         <button
@@ -150,10 +153,10 @@ const Budget = () => {
                             title="Cancelar edição"
                             onClick={() => {
                                 setEditingItem(null);
-                                setFormData({ nome: '', tipo: 'Peça', valor: '' });
+                                setFormData({nome: '', tipo: 'Peça', valor: ''});
                             }}
                         >
-                            <FontAwesomeIcon icon="times" /> Cancelar
+                            <FontAwesomeIcon icon="times"/> Cancelar
                         </button>
                     )}
                 </div>
@@ -179,25 +182,25 @@ const Budget = () => {
                             <td>{item.nome}</td>
                             <td>{formatCurrency(Number(item.valor))}</td>
                             <td>
-                                <button onClick={() => handleEdit(item)} title="Editar" style={{ marginRight: '5px' }}>
-                                    <FontAwesomeIcon icon="edit" />
+                                <button onClick={() => handleEdit(item)} title="Editar" style={{marginRight: '5px'}}>
+                                    <FontAwesomeIcon icon="edit"/>
                                 </button>
                                 <button onClick={() => handleDelete(item.id)} title="Remover">
-                                    <FontAwesomeIcon icon="trash-alt" />
+                                    <FontAwesomeIcon icon="trash-alt"/>
                                 </button>
                             </td>
                         </tr>
                     ))}
                 {items.filter((item) => item.tipo === 'Peça').length > 0 && (
                     <tr className="section-header">
-                        <td style={{ textAlign: 'left' }}><strong>Subtotal:</strong></td>
+                        <td style={{textAlign: 'left'}}><strong>Subtotal:</strong></td>
                         <td>{formatCurrency(subtotalPecas)}</td>
                         <td></td>
                     </tr>
                 )}
                 {/* Spacer between sections */}
                 <tr>
-                    <td colSpan="3" style={{ border: 'none', height: '15px' }}></td>
+                    <td colSpan="3" style={{border: 'none', height: '15px'}}></td>
                 </tr>
                 {/* Section for Serviços */}
                 <tr className="section-header">
@@ -210,18 +213,18 @@ const Budget = () => {
                             <td>{item.nome}</td>
                             <td>{formatCurrency(Number(item.valor))}</td>
                             <td>
-                                <button onClick={() => handleEdit(item)} title="Editar" style={{ marginRight: '5px' }}>
-                                    <FontAwesomeIcon icon="edit" />
+                                <button onClick={() => handleEdit(item)} title="Editar" style={{marginRight: '5px'}}>
+                                    <FontAwesomeIcon icon="edit"/>
                                 </button>
                                 <button onClick={() => handleDelete(item.id)} title="Remover">
-                                    <FontAwesomeIcon icon="trash-alt" />
+                                    <FontAwesomeIcon icon="trash-alt"/>
                                 </button>
                             </td>
                         </tr>
                     ))}
                 {items.filter((item) => item.tipo === 'Serviço').length > 0 && (
                     <tr className="section-header">
-                        <td style={{ textAlign: 'left' }}><strong>Subtotal:</strong></td>
+                        <td style={{textAlign: 'left'}}><strong>Subtotal:</strong></td>
                         <td>{formatCurrency(subtotalServicos)}</td>
                         <td></td>
                     </tr>
@@ -234,19 +237,31 @@ const Budget = () => {
                 </tbody>
             </table>
 
-            <div className="totals" style={{ textAlign: 'left', marginTop: '20px' }}>
+            <div className="totals" style={{textAlign: 'left', marginTop: '20px'}}>
                 <p><strong>Total:</strong> {formatCurrency(totalGeral)}</p>
             </div>
 
-            <div className="button-group" style={{ display: 'flex', justifyContent: 'center' }}>
+            <div className="form-group" style={{marginTop: '20px'}}>
+                <label>Observações:</label>
+                <textarea
+                    name="observacoes"
+                    value={observations || ''}
+                    onChange={(e) => setObservations(e.target.value)}
+                    placeholder="Observações"
+                    rows="3"
+                    style={{width: '100%'}}
+                />
+            </div>
+
+            <div className="button-group" style={{display: 'flex', justifyContent: 'center'}}>
                 <button onClick={handleSaveBudget} title="Salvar Orçamento">
-                    <FontAwesomeIcon icon="save" /> Salvar
+                    <FontAwesomeIcon icon="save"/> Salvar
                 </button>
-                <button onClick={() => navigate(-1)} title="Voltar" style={{ marginLeft: '10px' }}>
-                    <FontAwesomeIcon icon="arrow-left" /> Voltar
+                <button onClick={() => navigate(-1)} title="Voltar" style={{marginLeft: '10px'}}>
+                    <FontAwesomeIcon icon="arrow-left"/> Voltar
                 </button>
-                <button onClick={handleExportPDF} title="Imprimir" style={{ marginLeft: '10px' }}>
-                    <FontAwesomeIcon icon="print" /> Imprimir
+                <button onClick={handleExportPDF} title="Imprimir" style={{marginLeft: '10px'}}>
+                    <FontAwesomeIcon icon="print"/> Imprimir
                 </button>
             </div>
         </div>

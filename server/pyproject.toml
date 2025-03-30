@@ -10,6 +10,7 @@ python = "^3.9"
 Flask = "^2.2.2"
 Flask-SQLAlchemy = "^3.0.2"
 Flask-Cors = "^3.0.10"
+Flask-Migrate = "^3.1.0"
 psycopg2-binary = "^2.9.6"
 
 [tool.poetry.group.dev.dependencies]

@@ -14,16 +14,18 @@ public class DataDTO {
     private String subTotalParts;
     private String subTotalServices;
     private String total;
+    private String observations;
 
     public DataDTO() { }
 
-    public DataDTO(Integer serviceId, List<ItemDTO> parts, List<ItemDTO> services, String subTotalParts, String subTotalServices, String total) {
+    public DataDTO(Integer serviceId, List<ItemDTO> parts, List<ItemDTO> services, String subTotalParts, String subTotalServices, String total, String observations) {
         this.serviceId = serviceId;
         this.parts = parts;
         this.services = services;
         this.subTotalParts = subTotalParts;
         this.subTotalServices = subTotalServices;
         this.total = total;
+        this.observations = observations;
     }
 
     public Integer getServiceId() {
@@ -104,6 +106,14 @@ public class DataDTO {
 
     public void setTotal(String total) {
         this.total = total;
+    }
+
+    public String getObservations() {
+        return observations;
+    }
+
+    public void setObservations(String observations) {
+        this.observations = observations;
     }
 
 }

@@ -51,7 +51,7 @@ class Service(db.Model):
             "payment_method": self.payment_method,
             "description": self.description,
             "receipt_certificate": self.receipt_certificate,
-            "observations": self.observations,
+            "observations": self.observations
         }
 
 
@@ -60,6 +60,7 @@ class Budget(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     service_id = db.Column(db.Integer, db.ForeignKey('services.id'), nullable=False)
     data = db.Column(db.Text, nullable=True)
+    observations = db.Column(db.String, nullable=True)
 
     service = db.relationship('Service', backref=db.backref('budgets', lazy=True))
 
@@ -67,5 +68,6 @@ class Budget(db.Model):
         return {
             "id": self.id,
             "service_id": self.service_id,
-            "data": self.data
+            "data": self.data,
+            "observations": self.observations
         }

@@ -27,6 +27,8 @@ def export_budget_pdf(service_id):
     subtotal_services_str = f"R$ {subtotal_services:.2f}".replace(".", ",")
     total_str = f"R$ {total:.2f}".replace(".", ",")
 
+    observations = budget.observations
+
     template_name = "budget"
     data = {
         "serviceId": service_id,
@@ -38,7 +40,8 @@ def export_budget_pdf(service_id):
         "services": services,
         "subTotalParts": subtotal_parts_str,
         "subTotalServices": subtotal_services_str,
-        "total": total_str
+        "total": total_str,
+        "observations": observations
     }
     filename = f"budget_{service_id}"
 

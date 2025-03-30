@@ -1,5 +1,6 @@
 from flask import Flask, request, jsonify
 from flask_cors import CORS
+from flask_migrate import Migrate
 from config import Config
 from models import db, Budget, Service
 from datetime import datetime
@@ -9,6 +10,8 @@ app = Flask(__name__)
 app.config.from_object(Config)
 CORS(app)
 db.init_app(app)
+
+migrate = Migrate(app, db)
 
 with app.app_context():
     db.create_all()
@@ -73,14 +76,16 @@ def save_budget():
 
     service_id = data['service_id']
     budget_data = data['data']
+    observations = data['observations']
 
     budget = Budget.query.filter_by(service_id=service_id).first()
 
     if budget:
         budget.data = budget_data
+        budget.observations = observations
         message = 'Budget updated successfully'
     else:
-        budget = Budget(service_id=service_id, data=budget_data)
+        budget = Budget(service_id=service_id, data=budget_data, observations=observations)
         db.session.add(budget)
         message = 'Budget created successfully'
 
