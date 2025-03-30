@@ -4,7 +4,7 @@ from flask_migrate import Migrate
 from config import Config
 from models import db, Budget, Service
 from datetime import datetime
-from utils.export_pdf import export_budget_pdf
+from utils.export_pdf import export_budget_pdf, export_certificate_pdf, export_receipt_pdf
 
 app = Flask(__name__)
 app.config.from_object(Config)
@@ -63,6 +63,30 @@ def edit_service(service_id):
             setattr(service, key, value)
     db.session.commit()
     return jsonify(service.to_dict()), 200
+
+
+@app.route('/services/export/<int:service_id>/certificate', methods=['POST'])
+def export_certificate(service_id):
+    data = request.get_json()
+
+    response, error = export_certificate_pdf(service_id, data)
+    if error:
+        return jsonify({'error': error}), 500
+    if response is None:
+        return jsonify({'error': 'Budget not found'}), 404
+    return response
+
+
+@app.route('/services/export/<int:service_id>/receipt', methods=['POST'])
+def export_receipt(service_id):
+    data = request.get_json()
+
+    response, error = export_receipt_pdf(service_id, data)
+    if error:
+        return jsonify({'error': error}), 500
+    if response is None:
+        return jsonify({'error': 'Budget not found'}), 404
+    return response
 
 
 # Budget routes

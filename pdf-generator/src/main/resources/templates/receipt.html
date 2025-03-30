@@ -1,8 +1,8 @@
 <!DOCTYPE html>
-<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Orçamento - Serviço [[${data.serviceId}]]</title>
+    <title>Recibo de Pagamento</title>
     <style>
         @page {
             size: A4;
@@ -92,68 +92,22 @@
     </tr>
 </table>
 
-<h2>Orçamento</h2>
+<h2>Recibo de Pagamento</h2>
 
 <div class="company-info">
-    <p th:text="'Cliente: ' + (${data.customerName} != null ? ${data.customerName} : '')">Cliente: Nome do cliente</p>
-    <p th:text="'Oficina: ' + (${data.workshop} != null ? ${data.workshop} : '')">Oficina: Nome da oficina</p>
+    <p th:text="'Por meio deste documento, declaro para todos os fins e a quem possa interessar que recebi do(a) Sr(a). ' + (${data.customerName} != null ? ${data.customerName} : '') + ', CPF: ' + (${data.cpf} != null ? ${data.cpf} : '') + ' a quantia de R$ 6.000,00 referente aos serviços prestados no motor.'"></p>
+
+    <br>
     <p th:text="'Veiculo: ' + (${data.car} != null ? ${data.car} : '')">Veiculo: Nome do veiculo</p>
     <p th:text="'Placa: ' + (${data.licensePlate} != null ? ${data.licensePlate} : '')">Placa: Placa do veiculo</p>
-</div>
-
-<!-- Verifica se existem peças -->
-<div th:if="${data.parts.size() > 0}">
-    <table>
-        <thead>
-        <tr>
-            <th>Peças</th>
-            <th>Valor</th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr th:each="item : ${data.parts}">
-            <td th:text="${item.nome}">Nome da Peça</td>
-            <td th:text="'R$ ' + ${#numbers.formatDecimal(item.valor, 2, 2, 'COMMA')}">Valor da Peça</td>
-        </tr>
-        <tr>
-            <td colspan="2"><strong th:text="'Total das Peças: ' + ${data.subTotalParts}">R$ 0,00</strong></td>
-        </tr>
-        </tbody>
-    </table>
-</div>
-
-<!-- Verifica se existem serviços -->
-<div th:if="${data.services.size() > 0}">
-    <table>
-        <thead>
-        <tr>
-            <th>Serviços</th>
-            <th>Valor</th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr th:each="item : ${data.services}">
-            <td th:text="${item.nome}">Nome do Serviço</td>
-            <td th:text="'R$ ' + ${#numbers.formatDecimal(item.valor, 2, 2, 'COMMA')}">Valor do Serviço</td>
-        </tr>
-        <tr>
-            <td colspan="2"><strong th:text="'Total dos Serviços: ' + ${data.subTotalServices}">R$ 0,00</strong></td>
-        </tr>
-        </tbody>
-    </table>
-</div>
-
-<div class="total">
-    <strong>Total: <span th:text="${data.total}">R$ 0,00</span></strong>
 </div>
 
 <br><br>
 
 <div>
-    <strong>OBS:</strong>
+    Forma de Pagamento:
     <ul style="list-style-type: none; padding-left: 0; margin-top: 0;">
-        <li>Orçamento válido para 10 dias</li>
-        <li th:if="${data.observations}" th:utext="${data.observations}" style="white-space: pre-line;"></li>
+        <li th:if="${data.description}" th:utext="${data.description}" style="white-space: pre-line;"></li>
     </ul>
 </div>
 

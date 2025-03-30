@@ -51,7 +51,7 @@ public class PdfService {
                     .map(file -> file.getName().replace(".html", ""))
                     .collect(Collectors.toList());
         } catch (IOException e) {
-            availableTemplates = List.of("budget");
+            availableTemplates = List.of("budget", "certificate_guarantee", "receipt");
         }
     }
 
@@ -82,10 +82,7 @@ public class PdfService {
         Resource resource = resourceLoader.getResource("classpath:static/images/logo.png");
         byte[] imageBytes = StreamUtils.copyToByteArray(resource.getInputStream());
 
-        String logo = Base64.getEncoder().encodeToString(imageBytes);
-        logger.info("Logo converted to base64: {}", logo);
-
-        return logo;
+        return Base64.getEncoder().encodeToString(imageBytes);
     }
 
     private String getCurrentDate() {

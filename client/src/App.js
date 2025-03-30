@@ -6,6 +6,7 @@ import ServiceList from './components/ServiceList';
 import ServiceForm from './components/ServiceForm';
 import './App.css';
 import Budget from "./components/Budget";
+import CertificateAndReceipt from "./components/CertificateAndReceipt";
 
 library.add(fas);
 
@@ -19,6 +20,7 @@ const App = () => {
             <Route path="/create" element={<ServiceForm />} />
             <Route path="/edit/:id" element={<ServiceForm />} />
             <Route path={"/budget/:serviceId"} element={<Budget />} />
+            <Route path={"/service/:serviceId/docs"} element={<CertificateAndReceipt />} />
           </Routes>
         </div>
       </Router>

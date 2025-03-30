@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Certificado de Garantia</title>
     <style>
         @page {
             size: A4;
@@ -95,7 +95,10 @@
 <h2>Certificado de Garantia</h2>
 
 <div class="company-info">
-    <p th:text="'Cliente: ' + (${data.customerName} != null ? ${data.customerName} : '')">Cliente: Nome do cliente</p>
+<!--    <p th:text="'Cliente: ' + (${data.customerName} != null ? ${data.customerName} : '')">Cliente: Nome do cliente</p>-->
+    <p>
+        <strong>Cliente: </strong> <span th:text="${data.customerName} != null ? ${data.customerName} : ''"></span>
+    </p>
     <p th:text="'Veiculo: ' + (${data.car} != null ? ${data.car} : '')">Veiculo: Nome do veiculo</p>
     <p th:text="'Placa: ' + (${data.licensePlate} != null ? ${data.licensePlate} : '')">Placa: Placa do veiculo</p>
     <p th:text="'KM: ' + (${data.km} != null ? ${data.km} : '')">KM: Km do veiculo</p>
@@ -105,8 +108,8 @@
 
 <div>
     <p>Garantia do serviço referente a retifica do motor</p>
-    <p>Receber por parametro</p>
-    <p>A primeira troca de óleo terá que ser feita com 1.000 KM rodados</p>
+    <p th:text="${data.description}">Descriçao do serviço</p>
+    <p>A primeira troca de óleo terá que ser feita com 1.000 kms rodados</p>
     <p>A validade deste serviço está garantida no período de 03 meses</p>
 </div>
 

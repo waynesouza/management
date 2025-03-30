@@ -134,6 +134,11 @@ const ServiceList = () => {
                                     <FontAwesomeIcon icon="file-invoice-dollar" />
                                 </button>
                             </Link>
+                            <Link to={`/service/${service.id}/docs`}>
+                                <button title="Documentos" style={{ marginLeft: '5px' }}>
+                                    <FontAwesomeIcon icon="file-alt" />
+                                </button>
+                            </Link>
                         </td>
                     </tr>
                 ))}
