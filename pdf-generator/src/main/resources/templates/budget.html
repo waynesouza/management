@@ -147,17 +147,11 @@
     <strong>Total: <span th:text="${data.total}">R$ 0,00</span></strong>
 </div>
 
-<!--<div>-->
-<!--    <p><strong>OBS:</strong> Orçamento válido para 10 dias</p>-->
-<!--    <div th:if="${data.observations}">-->
-<!--        <p th:text="${data.observations}">Observações adicionais</p>-->
-<!--    </div>-->
-<!--</div>-->
 <div>
-    <p><strong>OBS:</strong></p>
+    <strong>OBS:</strong>
     <ul style="list-style-type: none; padding-left: 0;">
         <li>Orçamento válido para 10 dias</li>
-        <li th:if="${data.observations}" th:each="observation : ${#strings.split(data.observations, '\n')}" th:text="${observation}"></li>
+        <li th:if="${data.observations}" th:each="observation : ${#strings.arraySplit(data.observations, '\n')}" th:text="${observation}"></li>
     </ul>
 </div>
 

@@ -5,12 +5,12 @@ import java.util.Map;
 public class PdfRequestDTO {
 
     private String templateName;
-    private DataDTO data;
+    private Map<String, Object> data;
     private String filename;
 
     public PdfRequestDTO() { }
 
-    public PdfRequestDTO(String templateName, DataDTO data, String filename) {
+    public PdfRequestDTO(String templateName, Map<String, Object> data, String filename) {
         this.templateName = templateName;
         this.data = data;
         this.filename = filename;
@@ -24,11 +24,11 @@ public class PdfRequestDTO {
         this.templateName = templateName;
     }
 
-    public DataDTO getData() {
+    public Map<String, Object> getData() {
         return data;
     }
 
-    public void setData(DataDTO data) {
+    public void setData(Map<String, Object> data) {
         this.data = data;
     }
 

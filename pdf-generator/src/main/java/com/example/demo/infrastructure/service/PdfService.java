@@ -55,7 +55,7 @@ public class PdfService {
         }
     }
 
-    public byte[] generatePdf(String templateName, DataDTO data) throws IOException {
+    public byte[] generatePdf(String templateName, Map<String, Object> data) throws IOException {
         if (!availableTemplates.contains(templateName)) {
             throw new IllegalArgumentException("Template not found: " + templateName);
         }
