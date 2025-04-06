@@ -1,14 +1,18 @@
-# Use uma imagem base com Temurin 21
-FROM eclipse-temurin:21-jdk-alpine
-
-# Defina o diretório de trabalho
+# Stage 1: build
+FROM maven:3-eclipse-temurin-21-alpine AS build
 WORKDIR /app
 
-# Copie o arquivo de build da aplicação para o container
-COPY target/*.jar app.jar
+COPY pom.xml .
+COPY src ./src
 
-# Exponha a porta que a aplicação usará
+RUN mvn clean package -DskipTests
+
+# Stage 2: runtime
+FROM eclipse-temurin:21-jre-alpine
+WORKDIR /app
+
+# copia o JAR gerado no estágio de build
+COPY --from=build /app/target/*.jar app.jar
+
 EXPOSE 8080
-
-# Comando para rodar a aplicação
 ENTRYPOINT ["java", "-jar", "app.jar"]

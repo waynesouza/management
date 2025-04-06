@@ -63,7 +63,8 @@ public class PdfService {
         Context context = new Context();
         if (data != null) {
             context.setVariable("data", data);
-            context.setVariable("logo", convertImageToBase64());
+            context.setVariable("logo", convertImageToBase64("logo"));
+            context.setVariable("signature", convertImageToBase64("signature"));
             context.setVariable("currentDate", getCurrentDate());
         }
 
@@ -78,8 +79,9 @@ public class PdfService {
         return response;
     }
 
-    private String convertImageToBase64() throws IOException {
-        Resource resource = resourceLoader.getResource("classpath:static/images/logo.png");
+    private String convertImageToBase64(String image) throws IOException {
+        String location = "classpath:static/images/" + image + ".png";
+        Resource resource = resourceLoader.getResource(location);
         byte[] imageBytes = StreamUtils.copyToByteArray(resource.getInputStream());
 
         return Base64.getEncoder().encodeToString(imageBytes);

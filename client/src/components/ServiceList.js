@@ -7,9 +7,9 @@ import '../App.css';
 const ServiceList = () => {
     const [services, setServices] = useState([]);
     const [filters, setFilters] = useState({
-        os: '',
         customer_name: '',
-        license_plate: ''
+        workshop: '',
+        car: ''
     });
     const [currentPage, setCurrentPage] = useState(1);
     const [itemsPerPage, setItemsPerPage] = useState(10);
@@ -60,16 +60,6 @@ const ServiceList = () => {
             <h2>Lista de Serviços</h2>
             <form onSubmit={handleFilterSubmit}>
                 <div className="form-group">
-                    <label>OS:</label>
-                    <input
-                        type="text"
-                        name="os"
-                        placeholder="Digite a OS"
-                        value={filters.os}
-                        onChange={handleFilterChange}
-                    />
-                </div>
-                <div className="form-group">
                     <label>Nome do Cliente:</label>
                     <input
                         type="text"
@@ -80,32 +70,42 @@ const ServiceList = () => {
                     />
                 </div>
                 <div className="form-group">
-                    <label>Placa:</label>
+                    <label>Oficina:</label>
                     <input
                         type="text"
-                        name="license_plate"
-                        placeholder="Digite a placa"
-                        value={filters.license_plate}
+                        name="workshop"
+                        placeholder="Digite o nome da oficina"
+                        value={filters.workshop}
+                        onChange={handleFilterChange}
+                    />
+                </div>
+                <div className="form-group">
+                    <label>Carro:</label>
+                    <input
+                        type="text"
+                        name="car"
+                        placeholder="Digite o modelo do carro"
+                        value={filters.car}
                         onChange={handleFilterChange}
                     />
                 </div>
                 <div className="button-group">
                     <button type="submit" title="Filtrar">
-                        <FontAwesomeIcon icon="search" /> Filtrar
+                        <FontAwesomeIcon icon="search"/> Filtrar
                     </button>
                 </div>
             </form>
 
-            <div className="button-group" style={{ marginTop: '20px', textAlign: 'center' }}>
+            <div className="button-group" style={{marginTop: '20px', textAlign: 'center'}}>
                 <Link to="/create">
                     <button title="Criar Novo Serviço">
-                        <FontAwesomeIcon icon="plus" /> Criar Novo Serviço
+                        <FontAwesomeIcon icon="plus"/> Criar Novo Serviço
                     </button>
                 </Link>
             </div>
 
             <table>
-                <thead>
+            <thead>
                 <tr>
                     <th>OS</th>
                     <th>Data de Início</th>

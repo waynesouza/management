@@ -70,7 +70,7 @@
         footer {
             text-align: center;
             width: 100%;
-            height: 70px;
+            height: auto;
             position: absolute;
             bottom: 0;
             left: 0;
@@ -84,7 +84,7 @@
             <img th:src="'data:image/png;base64,' + ${logo}" alt="Company Logo" class="logo">
         </td>
         <td style="width:70%;" class="company-info">
-            <p><strong>Retifica Souza</strong></p>
+            <p><strong>Retífica Souza</strong></p>
             <p><strong>CNPJ:</strong> 51.898.396/0001-77</p>
             <p><strong>Endereço:</strong> Geraldo Roberto de Oliveira, 228, Ouro Verde, Formiga/MG</p>
             <p><strong>Telefone:</strong> (37) 99956-7542</p>
@@ -92,16 +92,23 @@
     </tr>
 </table>
 
+<hr>
+
 <h2>Certificado de Garantia</h2>
 
 <div class="company-info">
-<!--    <p th:text="'Cliente: ' + (${data.customerName} != null ? ${data.customerName} : '')">Cliente: Nome do cliente</p>-->
     <p>
         <strong>Cliente: </strong> <span th:text="${data.customerName} != null ? ${data.customerName} : ''"></span>
     </p>
-    <p th:text="'Veiculo: ' + (${data.car} != null ? ${data.car} : '')">Veiculo: Nome do veiculo</p>
-    <p th:text="'Placa: ' + (${data.licensePlate} != null ? ${data.licensePlate} : '')">Placa: Placa do veiculo</p>
-    <p th:text="'KM: ' + (${data.km} != null ? ${data.km} : '')">KM: Km do veiculo</p>
+    <p>
+        <strong>Veículo: </strong> <span th:text="${data.car} != null ? ${data.car} : ''"></span>
+    </p>
+    <p>
+        <strong>Placa: </strong> <span th:text="${data.licensePlate} != null ? ${data.licensePlate} : ''"></span>
+    </p>
+    <p>
+        <strong>KM: </strong> <span th:text="${data.km} != null ? ${data.km} : ''"></span>
+    </p>
 </div>
 
 <br><br>
@@ -114,6 +121,8 @@
 </div>
 
 <footer>
+    <img th:src="'data:image/png;base64,' + ${signature}" alt="Signature" class="logo">
+    <p><strong>RETÍFICA SOUZA</strong></p>
     <p th:text="'Formiga, ' + ${currentDate}">Cidade, DD de MM de YYYY</p>
 </footer>
 </body>

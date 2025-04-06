@@ -107,7 +107,7 @@ const Budget = () => {
 
     return (
         <div className="container">
-            <h2>Orçamento - Serviço {serviceId}</h2>
+            <h2>Orçamento</h2>
             <form onSubmit={handleSubmitItem}>
                 <div className="form-group">
                     <label>Nome:</label>

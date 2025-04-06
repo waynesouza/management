@@ -26,7 +26,7 @@ def list_services():
 
     for key, value in request.args.items():
         if hasattr(Service, key):
-            query = query.filter(getattr(Service, key) == value)
+            query = query.filter(getattr(Service, key).ilike(f"%{value.lower()}%"))
     services = query.all()
     return jsonify([service.to_dict() for service in services]), 200
 
