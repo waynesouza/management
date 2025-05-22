@@ -97,10 +97,11 @@
 <h2>Orçamento</h2>
 
 <div class="company-info">
-    <p th:text="'Cliente: ' + (${data.customerName} != null ? ${data.customerName} : '')">Cliente: Nome do cliente</p>
-    <p th:text="'Oficina: ' + (${data.workshop} != null ? ${data.workshop} : '')">Oficina: Nome da oficina</p>
-    <p th:text="'Veículo: ' + (${data.car} != null ? ${data.car} : '')">Veículo: Nome do Veículo</p>
-    <p th:text="'Placa: ' + (${data.licensePlate} != null ? ${data.licensePlate} : '')">Placa: Placa do Veículo</p>
+    <p th:if="${data.customerName} != null and ${data.customerName} != ''" th:text="'Cliente: ' + ${data.customerName}">Cliente: Nome do cliente</p>
+    <p th:if="${data.workshop} != null and ${data.workshop} != ''" th:text="'Oficina: ' + ${data.workshop}">Oficina: Nome da oficina</p>
+    <p th:if="${data.car} != null and ${data.car} != ''" th:text="'Veículo: ' + ${data.car}">Veículo: Nome do Veículo</p>
+    <p th:if="${data.licensePlate} != null and ${data.licensePlate} != ''" th:text="'Placa: ' + ${data.licensePlate}">Placa: Placa do Veículo</p>
+    <p th:if="${data.motor} != null and ${data.motor} != ''" th:text="'Motor: ' + ${data.motor}">Motor: </p>
 </div>
 
 <!-- Verifica se existem peças -->
@@ -115,7 +116,7 @@
         <tbody>
         <tr th:each="item : ${data.parts}">
             <td th:text="${item.nome}">Nome da Peça</td>
-            <td th:text="'R$ ' + ${#numbers.formatDecimal(item.valor, 2, 2, 'COMMA')}">Valor da Peça</td>
+            <td th:text="${item.valor_formatado}">Valor da Peça</td>
         </tr>
         <tr>
             <td colspan="2"><strong th:text="'Total das Peças: ' + ${data.subTotalParts}">R$ 0,00</strong></td>
@@ -136,7 +137,7 @@
         <tbody>
         <tr th:each="item : ${data.services}">
             <td th:text="${item.nome}">Nome do Serviço</td>
-            <td th:text="'R$ ' + ${#numbers.formatDecimal(item.valor, 2, 2, 'COMMA')}">Valor do Serviço</td>
+            <td th:text="${item.valor_formatado}">Valor do Serviço</td>
         </tr>
         <tr>
             <td colspan="2"><strong th:text="'Total dos Serviços: ' + ${data.subTotalServices}">R$ 0,00</strong></td>
@@ -151,7 +152,7 @@
 
 <br><br>
 
-<div th:if="${data.observations}">
+<div th:if="${data.observations} != null and ${data.observations} != ''">
     <strong>OBS:</strong>
     <ul style="list-style-type: none; padding-left: 0; margin-top: 0;">
         <li th:utext="${data.observations}" style="white-space: pre-line;"></li>

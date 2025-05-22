@@ -4,6 +4,9 @@ import requests
 from io import BytesIO
 from flask import render_template_string, make_response, send_file
 from models import Budget, Service
+import locale
+
+locale.setlocale(locale.LC_ALL, 'pt_BR.UTF-8')
 
 
 def export_budget_pdf(service_id):
@@ -23,9 +26,14 @@ def export_budget_pdf(service_id):
     subtotal_services = sum(float(item.get("valor", 0)) for item in services)
     total = subtotal_parts + subtotal_services
 
-    subtotal_parts_str = f"R$ {subtotal_parts:.2f}".replace(".", ",")
-    subtotal_services_str = f"R$ {subtotal_services:.2f}".replace(".", ",")
-    total_str = f"R$ {total:.2f}".replace(".", ",")
+    for item in parts:
+        item['valor_formatado'] = locale.currency(float(item.get('valor', 0)), grouping=True, symbol=True)
+    for item in services:
+        item['valor_formatado'] = locale.currency(float(item.get('valor', 0)), grouping=True, symbol=True)
+
+    subtotal_parts_str = locale.currency(subtotal_parts, grouping=True, symbol=True)
+    subtotal_services_str = locale.currency(subtotal_services, grouping=True, symbol=True)
+    total_str = locale.currency(total, grouping=True, symbol=True)
 
     observations = budget.observations
 
@@ -35,6 +43,7 @@ def export_budget_pdf(service_id):
         "customerName": service.customer_name,
         "workshop": service.workshop,
         "car": service.car,
+        "motor": service.motor,
         "licensePlate": service.license_plate,
         "parts": parts,
         "services": services,
